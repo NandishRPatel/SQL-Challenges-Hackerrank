@@ -925,12 +925,31 @@ for each of the paper types for each account.
 */
 
 
+SELECT a.name, AVG(standard_qty) standard_avg, 
+AVG(gloss_qty) gloss_avg, AVG(poster_qty) poster_avg
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+GROUP BY a.name
+ORDER BY a.name;
+
+
 /*
 2. For each account, determine the average amount spent 
 per order on each paper type. Your result should have 
 four columns - one for the account name and one for the 
 average amount spent on each paper type.
 */
+
+
+SELECT a.name, AVG(standard_amt_usd) standard_amt, 
+AVG(gloss_amt_usd) gloss_amt, 
+AVG(poster_amt_usd) poster_amt
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+GROUP BY a.name
+ORDER BY a.name;
 
 
 /*
@@ -943,6 +962,16 @@ of occurrences first.
 */
 
 
+SELECT s.name, w.channel, COUNT(*) num_occ
+FROM web_events w
+JOIN accounts a
+ON w.account_id = a.id
+JOIN sales_reps s
+ON a.sales_rep_id = s.id
+GROUP BY s.name, w.channel
+ORDER BY num_occ DESC;
+
+
 /*
 4. Determine the number of times a particular channel 
 was used in the web_events table for each region. Your 
@@ -950,3 +979,15 @@ final table should have three columns - the region name,
 the channel, and the number of occurrences. Order your 
 table with the highest number of occurrences first.
 */
+
+
+SELECT r.name, w.channel, COUNT(*) num_occ
+FROM region r
+JOIN sales_reps s
+ON r.id = s.region_id
+JOIN accounts a
+ON s.id = a.sales_rep_id
+JOIN web_events w
+ON a.id = w.account_id
+GROUP BY r.name, w.channel
+ORDER BY num_occ DESC;
