@@ -991,3 +991,18 @@ JOIN web_events w
 ON a.id = w.account_id
 GROUP BY r.name, w.channel
 ORDER BY num_occ DESC;
+
+
+
+### Questions: DISTINCT
+
+
+/*
+1. Use DISTINCT to test if there are any accounts 
+associated with more than one region.
+*/
+
+
+/*
+2. Have any sales reps worked on more than one account?
+*/
