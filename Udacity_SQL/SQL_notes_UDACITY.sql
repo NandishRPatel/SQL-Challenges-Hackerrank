@@ -1483,6 +1483,12 @@ orders in each year, ordered from greatest to least.
 Do you notice any trends in the yearly sales totals?
 */
 
+SELECT DATE_TRUNC('year', occurred_at) year_order,
+       # DATE_PART('year', occurred_at) year_order,
+SUM(total_amt_usd) total_amt_usd
+FROM orders
+GROUP BY 1
+ORDER BY 2 DESC;
 
 /* 
 When we look at the yearly totals, you might notice 
@@ -1503,12 +1509,27 @@ sales in terms of total dollars? Are all months evenly
 represented by the dataset?
 */
 
+SELECT DATE_PART('month', occurred_at) month_order,
+SUM(total_amt_usd) total_amt_usd
+FROM orders
+GROUP BY 1
+ORDER BY 2 DESC;
+# December
+
 
 /*
 3. Which year did Parch & Posey have the greatest sales 
 in terms of total number of orders? Are all years 
 evenly represented by the dataset?
 */
+
+SELECT DATE_PART('year', occurred_at) month_order,
+COUNT(*) total_orders
+FROM orders
+GROUP BY 1
+ORDER BY 2 DESC;
+# 2016. 
+# NO, year 13 and 17 are not
 
 
 /*
@@ -1517,8 +1538,26 @@ sales in terms of total number of orders? Are all
 months evenly represented by the dataset?
 */
 
+SELECT DATE_PART('month', occurred_at) month_order,
+COUNT(*) total_orders
+FROM orders
+GROUP BY 1
+ORDER BY 2 DESC;
+# December
 
 /*
 5. In which month of which year did Walmart spend the 
 most on gloss paper in terms of dollars?
 */
+
+
+SELECT a.name, 
+DATE_TRUNC('month', o.occurred_at) month_order,
+SUM(o.gloss_amt_usd) as gloss_amt
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+WHERE a.name = 'Walmart'
+GROUP BY 1, 2
+ORDER BY 3 DESC;
+# May 2016
