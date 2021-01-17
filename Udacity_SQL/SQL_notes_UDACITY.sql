@@ -1292,14 +1292,40 @@ by an aggregate, you need to use HAVING instead.
 that they manage?
 */
 
+SELECT s.id, s.name COUNT(a.id) num_accounts
+FROM sales_reps s
+JOIN accounts a
+ON s.id = a.sales_rep_id
+GROUP BY s.id, s.name # GROUP BY 1, 2
+HAVING COUNT(a.id) > 5
+ORDER BY num_accounts DESC; # ORDER BY 2 DESC
+
+
 /*
 2. How many accounts have more than 20 orders?
 */
+
+SELECT a.id, a.name, COUNT(o.id) num_orders
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1, 2 # GROUP BY a.id, a.name
+HAVING COUNT(o.id) > 20
+ORDER BY 3 DESC; # ORDER BY num_orders
 
 
 /*
 3. Which account has the most orders?
 */
+
+SELECT a.id, a.name, COUNT(o.id) num_orders
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1, 2 # GROUP BY a.id, a.name
+HAVING COUNT(o.id) > 20
+ORDER BY 3 DESC # ORDER BY num_orders
+LIMIT 1; 
 
 
 /*
@@ -1307,21 +1333,52 @@ that they manage?
 across all orders?
 */
 
+SELECT a.id, a.name, SUM(o.total_amt_usd) total_amt
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1, 2 # GROUP BY a.id, a.name
+HAVING SUM(o.total) > 30000
+ORDER BY 3 DESC; # ORDER BY total_amt
+
 
 /*
 5. Which accounts spent less than 1,000 usd total 
 across all orders?
 */
 
+SELECT a.id, a.name, SUM(o.total) total_amt
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1, 2 # GROUP BY a.id, a.name
+HAVING SUM(o.total) < 1000
+ORDER BY 3; # ORDER BY total_amt
 
 /*
 6. Which account has spent the most with us?
 */
 
+SELECT a.id, a.name, SUM(o.total_amt_usd) total_amt
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1, 2 # GROUP BY a.id, a.name
+ORDER BY 3 DESC # ORDER BY total_amt
+LIMIT 1; 
+
 
 /*
 7. Which account has spent the least with us?
 */
+
+SELECT a.id, a.name, SUM(o.total_amt_usd) total_amt
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1, 2 # GROUP BY a.id, a.name
+ORDER BY 3 # ORDER BY total_amt
+LIMIT 1; 
 
 
 /*
@@ -1329,10 +1386,29 @@ across all orders?
 customers more than 6 times?
 */
 
+SELECT a.id, a.name, COUNT(*) times_used
+FROM accounts a
+JOIN web_events w
+ON a.id = w.account_id
+WHERE w.channel = 'facebook'
+GROUP BY 1, 2 # GROUP BY a.id, a.name
+HAVING COUNT(*) > 6 # HAVING COUNT(*) > 6 
+                    # AND w.channel = 'facebook'
+ORDER BY 3 DESC; # ORDER BY times_used
+
 
 /*
 9. Which account used facebook most as a channel?
 */
+
+SELECT a.id, a.name, COUNT(*) times_used
+FROM accounts a
+JOIN web_events w
+ON a.id = w.account_id
+WHERE w.channel = 'facebook'
+GROUP BY 1, 2 # GROUP BY a.id, a.name
+ORDER BY 3 DESC # ORDER BY times_used
+LIMIT 1;
 
 
 /*
@@ -1340,3 +1416,10 @@ customers more than 6 times?
 accounts?
 */
 
+SELECT a.id, a.name, w.channel, COUNT(*) times_used
+FROM accounts a
+JOIN web_events w
+ON a.id = w.account_id
+GROUP BY 1, 2, 3 # GROUP BY a.id, a.name, w.channel
+ORDER BY 4 DESC # ORDER BY times_used
+LIMIT 20;
