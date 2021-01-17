@@ -1031,3 +1031,71 @@ ORDER BY num_accounts;
 
 SELECT DISTINCT id, name
 FROM sales_reps;
+
+
+
+### Questions: HAVING
+
+# NOTE
+/*
+HAVING is the “clean” way to filter a query that has 
+been aggregated, but this is also commonly done using 
+a subquery. Essentially, any time you want to perform 
+a WHERE on an element of your query that was created 
+by an aggregate, you need to use HAVING instead.
+*/
+
+
+/*
+1. How many of the sales reps have more than 5 accounts 
+that they manage?
+*/
+
+/*
+2. How many accounts have more than 20 orders?
+*/
+
+
+/*
+3. Which account has the most orders?
+*/
+
+
+/*
+4. Which accounts spent more than 30,000 usd total 
+across all orders?
+*/
+
+
+/*
+5. Which accounts spent less than 1,000 usd total 
+across all orders?
+*/
+
+
+/*
+6. Which account has spent the most with us?
+*/
+
+
+/*
+7. Which account has spent the least with us?
+*/
+
+
+/*
+8. Which accounts used facebook as a channel to contact 
+customers more than 6 times?
+*/
+
+
+/*
+9. Which account used facebook most as a channel?
+*/
+
+
+/*
+10. Which channel was most frequently used by most 
+accounts?
+*/
+
