@@ -23,6 +23,13 @@ FROM orders
 ORDER BY occurred_at
 LIMIT(10);
 
+
+SELECT id, occurred_at, total_amt_usd 
+FROM orders
+ORDER BY 2
+LIMIT(10);
+
+
 /*
 2. Write a query to return the top 5 orders in terms of largest total_amt_usd. 
 Include the id, account_id, and total_amt_usd.
@@ -34,6 +41,13 @@ FROM orders
 ORDER BY total_amt_usd DESC
 LIMIT(5);
 
+
+SELECT id, account_id, total_amt_usd
+FROM orders
+ORDER BY 3 DESC
+LIMIT(5);
+
+
 /*
 3. Write a query to return the lowest 20 orders in terms of smallest 
 total_amt_usd. Include the id, account_id, and total_amt_usd.
@@ -44,6 +58,11 @@ FROM orders
 ORDER BY total_amt_usd
 LIMIT(20);
 
+
+SELECT id, account_id, total_amt_usd
+FROM orders
+ORDER BY 3
+LIMIT(20);
 
 
 ### ORDER BY RETURNS
@@ -59,6 +78,11 @@ FROM orders
 ORDER BY account_id, total_amt_usd DESC;
 
 
+SELECT id, account_id, total_amt_usd
+FROM orders
+ORDER BY 2, 3 DESC;
+
+
 /*
 2. Now write a query that again displays order ID, account ID, and total dollar 
 amount for each order, but this time sorted first by total dollar amount (in 
@@ -68,6 +92,11 @@ descending order), and then by account ID (in ascending order).
 SELECT id, account_id, total_amt_usd
 FROM orders
 ORDER BY total_amt_usd DESC, account_id;
+
+
+SELECT id, account_id, total_amt_usd
+FROM orders
+ORDER BY 3 DESC, 2;
 
 
 /*
@@ -142,11 +171,14 @@ find the unit price for standard paper for each order. Limit the results to
 the first 10 orders, and include the id and account_id fields.
 */
 
-SELECT id, account_id, standard_amt_usd/standard_qty AS unit_price
+SELECT id, account_id, standard_amt_usd/standard_qty 
+AS unit_price
 FROM orders
 LIMIT(10);
 
-SELECT id, account_id, round(standard_amt_usd/standard_qty, 2) AS unit_price
+
+SELECT id, account_id, 
+round(standard_amt_usd/standard_qty, 2) AS unit_price
 FROM orders
 LIMIT(10);
 
@@ -166,7 +198,6 @@ calculations to the first 10 orders, as we did in question #1, and you'll avoid
 SELECT id, account_id, (poster_amt_usd * 100)/(poster_amt_usd + standard_amt_usd + 
 	gloss_amt_usd) AS percentage_revenue_poster
 FROM orders;
-
 
 
 SELECT id, account_id, round((poster_amt_usd * 100)/(poster_amt_usd + standard_amt_usd + 
@@ -304,6 +335,12 @@ WHERE gloss_qty BETWEEN 24 AND 29
 ORDER BY gloss_qty DESC;
 
 
+SELECT occurred_at, gloss_qty
+FROM orders
+WHERE gloss_qty BETWEEN 24 AND 29
+ORDER BY 2 DESC;
+
+
 /*
 4. Use the web_events table to find all information regarding individuals who 
 were contacted via the organic or adwords channels, and started their account 
@@ -313,8 +350,8 @@ at any point in 2016, sorted from newest to oldest.
 
 SELECT *
 FROM web_events
-WHERE channel IN ('organic', 'adwords') AND occurred_at BETWEEN '01-01-2016' 
-AND '01-01-2017';
+WHERE channel IN ('organic', 'adwords') AND 
+occurred_at BETWEEN '01-01-2016' AND '01-01-2017';
 
 
 ### Questions using the OR operator
@@ -409,7 +446,8 @@ name, the sales rep name, and the account name. Sort the accounts
 alphabetically (A-Z) according to account name.
 */
 
-SELECT r.name region_name, s.name sales_rep_name, a.name account_name
+SELECT r.name region_name, s.name sales_rep_name, 
+a.name account_name
 FROM region r
 JOIN sales_reps s
 ON r.id = s.region_id
@@ -419,13 +457,25 @@ ORDER BY account_name;
 
 
 
-SELECT r.name AS region_name, s.name AS sales_rep_name, a.name AS account_name
+SELECT r.name AS region_name, s.name AS sales_rep_name, 
+a.name AS account_name
 FROM region AS r
 JOIN sales_reps AS s
 ON r.id = s.region_id
 JOIN accounts AS a 
 ON s.id = a.sales_rep_id
 ORDER BY account_name;
+
+
+SELECT r.name region_name, s.name sales_rep_name, 
+a.name account_name
+FROM region r
+JOIN sales_reps s
+ON r.id = s.region_id
+JOIN accounts a 
+ON s.id = a.sales_rep_id
+ORDER BY 3;
+
 
 /*
 3. Provide the name for each region for every order, as well as the account 
@@ -462,7 +512,8 @@ the account name. Sort the accounts alphabetically (A-Z) according to account
 name.
 */
 
-SELECT r.name region_name, a.name account_name, s.name sales_rep_name
+SELECT r.name region_name, a.name account_name, 
+s.name sales_rep_name
 FROM region r 
 JOIN sales_reps s
 ON r.id = s.region_id  AND r.name = 'Midwest'
@@ -470,7 +521,19 @@ JOIN accounts a
 ON s.id = a.sales_rep_id
 ORDER BY a.name; /*ORDER BY account_name*/
 
-SELECT r.name region_name, a.name account_name, s.name sales_rep_name
+
+SELECT r.name region_name, a.name account_name, 
+s.name sales_rep_name
+FROM region r 
+JOIN sales_reps s
+ON r.id = s.region_id  AND r.name = 'Midwest'
+JOIN accounts a
+ON s.id = a.sales_rep_id
+ORDER BY 2; /*ORDER BY account_name*/
+
+
+SELECT r.name region_name, a.name account_name, 
+s.name sales_rep_name
 FROM region r 
 JOIN sales_reps s
 ON r.id = s.region_id 
@@ -488,7 +551,8 @@ should include three columns: the region name, the sales rep name, and the
 account name. Sort the accounts alphabetically (A-Z) according to account name.
 */
 
-SELECT r.name region_name, a.name account_name, s.name sales_rep_name
+SELECT r.name region_name, a.name account_name, 
+s.name sales_rep_name
 FROM region r 
 JOIN sales_reps s
 ON r.id = s.region_id  AND (s.name LIKE 'S%' AND r.name = 'Midwest')
@@ -497,7 +561,18 @@ ON s.id = a.sales_rep_id
 ORDER BY a.name; /*ORDER BY account_name*/
 
 
-SELECT r.name region_name, a.name account_name, s.name sales_rep_name
+SELECT r.name region_name, a.name account_name, 
+s.name sales_rep_name
+FROM region r 
+JOIN sales_reps s
+ON r.id = s.region_id  AND (s.name LIKE 'S%' AND r.name = 'Midwest')
+JOIN accounts a
+ON s.id = a.sales_rep_id
+ORDER BY 2; /*ORDER BY account_name*/
+
+
+SELECT r.name region_name, a.name account_name, 
+s.name sales_rep_name
 FROM region r 
 JOIN sales_reps s
 ON r.id = s.region_id 
@@ -515,16 +590,30 @@ should include three columns: the region name, the sales rep name, and the
 account name. Sort the accounts alphabetically (A-Z) according to account name.
 */
 
-SELECT r.name region_name, a.name account_name, s.name sales_rep_name
+SELECT r.name region_name, a.name account_name, 
+s.name sales_rep_name
 FROM region r 
 JOIN sales_reps s
-ON r.id = s.region_id  AND (s.name LIKE '% K%' AND r.name = 'Midwest')
+ON r.id = s.region_id  AND 
+(s.name LIKE '% K%' AND r.name = 'Midwest')
 JOIN accounts a
 ON s.id = a.sales_rep_id
 ORDER BY a.name; /*ORDER BY account_name*/
 
 
-SELECT r.name region_name, a.name account_name, s.name sales_rep_name
+SELECT r.name region_name, a.name account_name, 
+s.name sales_rep_name
+FROM region r 
+JOIN sales_reps s
+ON r.id = s.region_id  AND 
+(s.name LIKE '% K%' AND r.name = 'Midwest')
+JOIN accounts a
+ON s.id = a.sales_rep_id
+ORDER BY 2; /*ORDER BY account_name*/
+
+
+SELECT r.name region_name, a.name account_name, 
+s.name sales_rep_name
 FROM region r 
 JOIN sales_reps s
 ON r.id = s.region_id 
@@ -553,6 +642,18 @@ ON s.id = a.sales_rep_id
 JOIN orders o
 ON a.id = o.account_id AND o.standard_qty > 100
 ORDER BY unit_price;
+
+
+SELECT r.name region_name, a.name account_name, 
+o.total_amt_usd/(o.total + 0.001) unit_price
+FROM region r 
+JOIN sales_reps s
+ON r.id = s.region_id
+JOIN accounts a
+ON s.id = a.sales_rep_id
+JOIN orders o
+ON a.id = o.account_id AND o.standard_qty > 100
+ORDER BY 3;
 
 
 SELECT r.name region_name, a.name account_name, 
@@ -597,6 +698,18 @@ ON r.id = s.region_id
 JOIN accounts a
 ON s.id = a.sales_rep_id
 JOIN orders o
+ON a.id = o.account_id AND o.standard_qty > 100 AND o.poster_qty > 50
+ORDER BY 3;
+
+
+SELECT r.name region_name, a.name account_name, 
+o.total_amt_usd/(o.total + 0.001) unit_price
+FROM region r 
+JOIN sales_reps s
+ON r.id = s.region_id
+JOIN accounts a
+ON s.id = a.sales_rep_id
+JOIN orders o
 ON a.id = o.account_id
 WHERE o.standard_qty > 100 AND o.poster_qty > 50
 ORDER BY unit_price;
@@ -623,6 +736,18 @@ ON s.id = a.sales_rep_id
 JOIN orders o
 ON a.id = o.account_id AND o.standard_qty > 100 AND o.poster_qty > 50
 ORDER BY unit_price DESC;
+
+
+SELECT r.name region_name, a.name account_name, 
+o.total_amt_usd/(o.total + 0.001) unit_price
+FROM region r 
+JOIN sales_reps s
+ON r.id = s.region_id
+JOIN accounts a
+ON s.id = a.sales_rep_id
+JOIN orders o
+ON a.id = o.account_id AND o.standard_qty > 100 AND o.poster_qty > 50
+ORDER BY 3 DESC;
 
 
 SELECT r.name region_name, a.name account_name, 
@@ -673,14 +798,15 @@ columns: occurred_at, account name, order total, and order total_amt_usd.
 SELECT o.occurred_at, a.name, o.total, o.total_amt_usd
 FROM orders o
 JOIN accounts a
-ON o.account_id = a.id AND o.occurred_at BETWEEN '01-01-2015' AND '01-01-2016';
+ON o.account_id = a.id AND o.occurred_at BETWEEN 
+'01-01-2015' AND '01-01-2016';
 
 SELECT o.occurred_at, a.name, o.total, o.total_amt_usd
 FROM orders o
 JOIN accounts a
 ON o.account_id = a.id 
-WHERE o.occurred_at BETWEEN '01-01-2015' AND '01-01-2016';
-
+WHERE o.occurred_at BETWEEN '01-01-2015' AND 
+'01-01-2016';
 
 
 
@@ -753,6 +879,13 @@ FROM orders
 ORDER BY occurred_at
 LIMIT 1;
 
+
+SELECT occurred_at
+FROM orders
+ORDER BY 1
+LIMIT 1;
+
+
 /*
 3. When did the most recent (latest) web_event occur?
 */
@@ -769,6 +902,13 @@ SELECT occurred_at
 FROM web_events
 ORDER BY occurred_at DESC
 LIMIT 1;
+
+
+SELECT occurred_at
+FROM web_events
+ORDER BY 1 DESC
+LIMIT 1;
+
 
 /*
 5. Find the mean (AVERAGE) amount spent per order on 
@@ -821,6 +961,14 @@ ORDER BY o.occurred_at
 LIMIT 1;
 
 
+SELECT a.name, o.occurred_at
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+ORDER BY 2
+LIMIT 1;
+
+
 /*
 2. Find the total sales in usd for each account. You 
 should include two columns - the total sales for each 
@@ -834,6 +982,14 @@ JOIN accounts a
 ON o.account_id = a.id
 GROUP BY a.name
 ORDER BY total_sales DESC;
+
+
+SELECT a.name, SUM(o.total_amt_usd) total_sales
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+GROUP BY 1
+ORDER BY 2 DESC;
 
 
 /*
@@ -852,6 +1008,14 @@ ORDER BY w.occurred_at DESC
 LIMIT 1;
 
 
+SELECT w.channel, a.name, w.occurred_at
+FROM web_events w
+JOIN accounts a
+ON w.account_id = a.id
+ORDER BY 3 DESC
+LIMIT 1;
+
+
 /*
 4. Find the total number of times each type of channel 
 from the web_events was used. Your final table should 
@@ -866,6 +1030,12 @@ GROUP BY channel
 ORDER BY times_used DESC;
 
 
+SELECT channel, COUNT(*) times_used
+FROM web_events
+GROUP BY 1
+ORDER BY 2 DESC;
+
+
 /*
 5. Who was the primary contact associated with the 
 earliest web_event?
@@ -877,6 +1047,14 @@ FROM web_events w
 JOIN accounts a
 ON w.account_id = a.id
 ORDER BY w.occurred_at
+LIMIT 1; 
+
+
+SELECT w.occurred_at, a.primary_poc
+FROM web_events w
+JOIN accounts a
+ON w.account_id = a.id
+ORDER BY 1
 LIMIT 1; 
 
 
@@ -896,6 +1074,14 @@ GROUP BY a.name
 ORDER BY total_usd;
 
 
+SELECT a.name, MIN(o.total_amt_usd) total_usd
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1
+ORDER BY 2;
+
+
 /*
 7. Find the number of sales reps in each region. Your 
 final table should have two columns - the region and 
@@ -911,6 +1097,13 @@ ON r.id = s.region_id
 GROUP BY r.name
 ORDER BY total_sales_reps;
 
+
+SELECT r.name, COUNT(*) total_sales_reps
+FROM region r
+JOIN sales_reps s
+ON r.id = s.region_id
+GROUP BY 1
+ORDER BY 2;
 
 
 ### Questions: GROUP BY Part II
@@ -934,6 +1127,15 @@ GROUP BY a.name
 ORDER BY a.name;
 
 
+SELECT a.name, AVG(standard_qty) standard_avg, 
+AVG(gloss_qty) gloss_avg, AVG(poster_qty) poster_avg
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+GROUP BY 1
+ORDER BY 1;
+
+
 /*
 2. For each account, determine the average amount spent 
 per order on each paper type. Your result should have 
@@ -950,6 +1152,16 @@ JOIN accounts a
 ON o.account_id = a.id
 GROUP BY a.name
 ORDER BY a.name;
+
+
+SELECT a.name, AVG(standard_amt_usd) standard_amt, 
+AVG(gloss_amt_usd) gloss_amt, 
+AVG(poster_amt_usd) poster_amt
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+GROUP BY 1
+ORDER BY 1;
 
 
 /*
@@ -972,6 +1184,16 @@ GROUP BY s.name, w.channel
 ORDER BY num_occ DESC;
 
 
+SELECT s.name, w.channel, COUNT(*) num_occ
+FROM web_events w
+JOIN accounts a
+ON w.account_id = a.id
+JOIN sales_reps s
+ON a.sales_rep_id = s.id
+GROUP BY 1, 2
+ORDER BY 3 DESC;
+
+
 /*
 4. Determine the number of times a particular channel 
 was used in the web_events table for each region. Your 
@@ -992,6 +1214,17 @@ ON a.id = w.account_id
 GROUP BY r.name, w.channel
 ORDER BY num_occ DESC;
 
+
+SELECT r.name, w.channel, COUNT(*) num_occ
+FROM region r
+JOIN sales_reps s
+ON r.id = s.region_id
+JOIN accounts a
+ON s.id = a.sales_rep_id
+JOIN web_events w
+ON a.id = w.account_id
+GROUP BY 1, 2
+ORDER BY 3 DESC;
 
 
 ### Questions: DISTINCT
@@ -1027,6 +1260,14 @@ JOIN sales_reps s
 ON s.id = a.sales_rep_id
 GROUP BY s.id, s.name
 ORDER BY num_accounts;
+
+
+SELECT s.id, s.name, COUNT(*) num_accounts
+FROM accounts a
+JOIN sales_reps s
+ON s.id = a.sales_rep_id
+GROUP BY 1, 2
+ORDER BY 3;
 
 
 SELECT DISTINCT id, name
