@@ -1596,6 +1596,10 @@ order - ‘Large’ or ’Small’ - depending on if the order
 is $3000 or more, or smaller than $3000.
 */
 
+SELECT o.account_id, o.total_amt_usd, 
+	CASE WHEN o.total_amt_usd >= 3000 
+		THEN 'Large' ELSE 'Small' END AS Level
+FROM orders o;
 
 
 /*
@@ -1606,6 +1610,15 @@ items in each order. The three categories are:
 'Less than 1000'.
 */
 
+SELECT CASE 
+			WHEN o.total >= 2000 THEN 'At Least 2000'
+			WHEN o.total >= 1000 AND o.total < 2000 
+				THEN 'Between 1000 and 2000'
+			WHEN o.total < 1000 THEN 'Less than 1000'
+	    END AS Order_Category, 
+		COUNT(*) as total_orders
+FROM orders o
+GROUP BY 1;
 
 
 /*
@@ -1622,6 +1635,21 @@ level. Order with the top spending customers listed
 first.
 */
 
+SELECT a.name, SUM(o.total_amt_usd) as total_sales,
+       CASE
+           WHEN SUM(o.total_amt_usd) > 200000 
+               THEN 'TOP'
+           WHEN SUM(o.total_amt_usd) >= 100000 AND
+               SUM(o.total_amt_usd) <= 200000 
+               THEN 'MIDDLE'
+           WHEN SUM(o.total_amt_usd) < 100000 
+               THEN 'LOWEST'
+       END AS Level_Account
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1
+ORDER BY 2 DESC;
 
 
 /*
@@ -1632,6 +1660,22 @@ levels as in the previous question. Order with the top
 spending customers listed first.
 */
 
+SELECT a.name, SUM(o.total_amt_usd) as total_sales,
+       CASE
+           WHEN SUM(o.total_amt_usd) > 200000 
+               THEN 'TOP'
+           WHEN SUM(o.total_amt_usd) >= 100000 AND
+               SUM(o.total_amt_usd) <= 200000 
+               THEN 'MIDDLE'
+           WHEN SUM(o.total_amt_usd) < 100000 
+               THEN 'LOWEST'
+       END AS Level_Account
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id AND 
+    o.occurred_at > '2015-12-31'
+GROUP BY 1
+ORDER BY 2 DESC;
 
 
 /*
@@ -1643,6 +1687,17 @@ depending on if they have more than 200 orders. Place
 the top sales people first in your final table.
 */
 
+SELECT s.name, COUNT(*) total_orders,
+       CASE
+           WHEN COUNT(*) > 200 THEN 'TOP' ELSE 'NOT TOP'
+       END AS Level
+FROM sales_reps s
+JOIN accounts a
+ON s.id = a.sales_rep_id
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1
+ORDER BY 2 DESC;
 
 
 /*
@@ -1661,3 +1716,22 @@ people based on dollar amount of sales first in your
 final table. You might see a few upset sales people by 
 this criteria!
 */
+
+SELECT s.name, COUNT(*) total_orders, 
+       SUM(o.total_amt_usd) total_amt,
+       CASE
+           WHEN COUNT(*) > 200 OR 
+                    SUM(o.total_amt_usd) > 750000
+               THEN 'TOP'
+           WHEN COUNT(*) > 150
+               OR SUM(o.total_amt_usd) > 500000
+               THEN 'MIDDLE'
+           ELSE 'LOW'
+       END AS Level
+FROM sales_reps s
+JOIN accounts a
+ON s.id = a.sales_rep_id
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY 1
+ORDER BY 3 DESC;
