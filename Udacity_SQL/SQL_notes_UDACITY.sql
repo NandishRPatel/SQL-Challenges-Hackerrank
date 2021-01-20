@@ -1800,3 +1800,61 @@ ORDER BY 2 DESC;
 # facebook - 1.60
 # organic - 1.67
 # twitter - 1.32
+
+
+
+
+# Subqueries and temporary tables II
+
+/*
+Note that you should not include an alias when you 
+write a subquery in a conditional statement. This is 
+because the subquery is treated as an individual value 
+(or set of values in the IN case) rather than as a 
+table.
+
+Also, notice the query here compared a single value. If 
+we returned an entire column IN would need to be used 
+to perform a logical argument. If we are returning an 
+entire table, then we must use an ALIAS for the table, 
+and perform additional logic on the entire table.
+*/
+
+
+/*
+1. What was the month/year combo for the first order 
+placed?
+*/
+
+
+
+/*
+2. Match each value to the corresponding description.
+*/
+
+/*
+a. The average amount of standard paper sold on the 
+first month that any order was placed in the orders 
+table (in terms of quantity).
+*/
+
+
+/*
+b. The average amount of gloss paper sold on the first 
+month that any order was placed in the orders table 
+(in terms of quantity).
+*/
+
+
+/*
+c. The average amount of poster paper sold on the first 
+month that any order was placed in the orders table 
+(in terms of quantity).
+*/
+
+
+/*
+d. The total amount spent on all orders on the first 
+month that any order was placed in the orders table 
+(in terms of usd).
+/*
