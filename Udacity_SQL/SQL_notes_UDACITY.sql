@@ -1735,3 +1735,35 @@ JOIN orders o
 ON a.id = o.account_id
 GROUP BY 1
 ORDER BY 3 DESC;
+
+
+
+
+### Subqueries and temporary tables
+
+/*
+Both subqueries and table expressions are methods for 
+being able to write a query that creates a table, and 
+then write a query that interacts with this newly 
+created table. Sometimes the question you are trying to 
+answer doesn't have an answer when working directly 
+with existing tables in database.
+*/
+
+
+/*
+1. On which day-channel pair did the most events occur.
+*/
+
+
+/*
+2. Mark all of the below that are true regarding 
+writing your subquery.
+*/
+
+
+
+/*
+3. Match each channel to its corresponding average 
+number of events per day.
+*/
