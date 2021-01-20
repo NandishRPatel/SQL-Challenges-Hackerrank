@@ -1755,15 +1755,48 @@ with existing tables in database.
 1. On which day-channel pair did the most events occur.
 */
 
+SELECT DATE_TRUNC('day', w.occurred_at) as day, 
+w.channel, COUNT(*) event_count
+FROM web_events w
+GROUP BY 1, 2
+ORDER BY 3 DESC;
+
+# January 1 2017; direct
+# Decemeber 21 2016; direct
+
 
 /*
 2. Mark all of the below that are true regarding 
 writing your subquery.
 */
 
+# a. The original query goes in the FROM statement.
+# b. A * is used to pull all the data from the original
+	# query
+#c. Ypu must use an alias for the table you nest within
+	# the outer query
 
 
 /*
 3. Match each channel to its corresponding average 
 number of events per day.
 */
+
+
+SELECT channel, AVG(event_count)
+FROM
+	(
+	SELECT DATE_TRUNC('day', occurred_at) as day, 
+	channel, COUNT(*) event_count
+	FROM web_events 
+	GROUP BY 1, 2
+	) inner_query
+
+GROUP BY 1
+ORDER BY 2 DESC;
+
+
+# direct - 4.90
+# facebook - 1.60
+# organic - 1.67
+# twitter - 1.32
