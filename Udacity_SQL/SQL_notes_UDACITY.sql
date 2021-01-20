@@ -1826,7 +1826,8 @@ and perform additional logic on the entire table.
 placed?
 */
 
-
+SELECT MIN(occurred_at) as first_order_date
+FROM orders;
 
 /*
 2. Match each value to the corresponding description.
@@ -1838,12 +1839,23 @@ first month that any order was placed in the orders
 table (in terms of quantity).
 */
 
+SELECT AVG(standard_qty) AS first_month_standard_qty
+FROM orders
+WHERE DATE_TRUNC('month', occurred_at) = 
+	(SELECT DATE_TRUNC('month', MIN(occurred_at))
+	FROM orders);
 
 /*
 b. The average amount of gloss paper sold on the first 
 month that any order was placed in the orders table 
 (in terms of quantity).
 */
+
+SELECT AVG(gloss_qty) AS first_month_gloss_qty
+FROM orders
+WHERE DATE_TRUNC('month', occurred_at) = 
+	(SELECT DATE_TRUNC('month', MIN(occurred_at))
+	FROM orders);
 
 
 /*
@@ -1852,9 +1864,36 @@ month that any order was placed in the orders table
 (in terms of quantity).
 */
 
+SELECT AVG(poster_qty) AS first_month_poster_qty
+FROM orders
+WHERE DATE_TRUNC('month', occurred_at) = 
+	(SELECT DATE_TRUNC('month', MIN(occurred_at))
+	FROM orders);
+
+
 
 /*
 d. The total amount spent on all orders on the first 
 month that any order was placed in the orders table 
 (in terms of usd).
+*/
+
+SELECT SUM(total_amt_usd) AS first_month_sales
+FROM orders
+WHERE DATE_TRUNC('month', occurred_at) = 
+	(SELECT DATE_TRUNC('month', MIN(occurred_at))
+	FROM orders);
+
+
 /*
+OR a, b, c & d together can be written as
+*/
+
+SELECT AVG(standard_qty) AS first_month_std_qty,
+	   AVG(gloss_qty) AS first_month_gloss_qty,
+	   AVG(poster_qty) AS first_month_poster_qty,
+	   SUM(total_amt_usd) AS first_month_sales
+FROM orders
+WHERE DATE_TRUNC('month', occurred_at) = 
+	(SELECT DATE_TRUNC('month', MIN(occurred_at))
+	FROM orders);
