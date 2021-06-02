@@ -1759,7 +1759,7 @@ SELECT DATE_TRUNC('day', w.occurred_at) as day,
 w.channel, COUNT(*) event_count
 FROM web_events w
 GROUP BY 1, 2
-ORDER BY 3 DESC;
+ORDER BY 3 desc;
 
 # January 1 2017; direct
 # Decemeber 21 2016; direct
