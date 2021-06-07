@@ -1973,6 +1973,27 @@ account name which has bought the most standard_qty
 paper throughout their lifetime as a customer?
 */
 
+SELECT COUNT(*) 
+FROM
+	(SELECT a.name aname, SUM(o.total) total_qty
+	FROM orders o
+	JOIN accounts a
+	ON a.id = o.account_id
+	GROUP BY 1
+	HAVING SUM(o.total) > 
+		(SELECT total_qty
+		FROM 
+			(SELECT a.name aname, 
+				SUM(o.standard_qty) std_qty,
+				SUM(o.total) total_qty
+			FROM orders o
+			JOIN accounts a
+			ON a.id = o.account_id
+			GROUP BY 1
+			ORDER BY 2 DESC
+			LIMIT 1) t1
+		)
+	) t3
 
 /*
 4. For the customer that spent the most (in total over 
