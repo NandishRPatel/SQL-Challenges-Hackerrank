@@ -1908,6 +1908,35 @@ WHERE DATE_TRUNC('month', occurred_at) =
 with the largest amount of total_amt_usd sales.
 */
 
+SELECT t2.sname, t1.max_total
+FROM (SELECT rname, MAX(total) as max_total
+	  FROM (SELECT r.name rname, s.name sname, 
+	   		SUM(o.total_amt_usd) total
+			FROM orders o
+			JOIN accounts a
+			ON a.id = o.account_id
+			JOIN sales_reps s
+			ON a.sales_rep_id = s.id
+			JOIN region r
+			ON s.region_id = r.id
+			GROUP BY 1, 2
+			) sub
+	   GROUP BY 1
+	   ) t1
+JOIN   (SELECT r.name rname, s.name sname, 
+	    SUM(o.total_amt_usd) total
+	    FROM orders o
+		JOIN accounts a
+		ON a.id = o.account_id
+		JOIN sales_reps s
+		ON a.sales_rep_id = s.id
+		JOIN region r
+		ON s.region_id = r.id
+		GROUP BY 1, 2
+	    ) t2
+ON t1.max_total = t2.total;
+
+
 
 
 /*
