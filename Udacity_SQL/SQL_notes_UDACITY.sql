@@ -2001,12 +2001,38 @@ their lifetime as a customer) total_amt_usd, how many
 web_events did they have for each channel?
 */
 
+SELECT w.channel, COUNT(*)
+FROM web_events w
+JOIN accounts a
+ON a.id = w.account_id and a.name = (SELECT aname
+FROM
+	(SELECT a.name aname, SUM(total_amt_usd) total_spent
+	FROM orders o
+	JOIN accounts a
+	ON a.id = o.account_id
+	GROUP BY 1
+	ORDER BY 2 DESC
+	LIMIT 1) t1
+)
+GROUP BY 1
+ORDER BY 2 DESC
+
 
 /*
 5. What is the lifetime average amount spent in terms 
 of total_amt_usd for the top 10 total spending 
 accounts?
 */
+
+SELECT AVG(total_spent)
+FROM (SELECT a.name aname, SUM(o.total_amt_usd) total_spent
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10) t1
+
 
 
 /*
