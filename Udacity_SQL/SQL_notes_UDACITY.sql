@@ -1934,9 +1934,7 @@ JOIN   (SELECT r.name rname, s.name sname,
 		ON s.region_id = r.id
 		GROUP BY 1, 2
 	    ) t2
-ON t1.max_total = t2.total;
-
-
+ON t1.max_total = t2.total and t1.rname = t2.rname;
 
 
 /*
@@ -1945,6 +1943,29 @@ total_amt_usd, how many total (count) orders were
 placed?
 */
 
+SELECT r.name, COUNT(o.id)
+FROM orders o
+JOIN accounts a
+ON a.id = o.account_id
+JOIN sales_reps s
+ON a.sales_rep_id = s.id
+JOIN region r
+ON s.region_id = r.id
+WHERE r.name = (SELECT rname 
+	FROM  (SELECT r.name rname, SUM(o.total_amt_usd) total_region
+			FROM orders o
+			JOIN accounts a
+			ON a.id = o.account_id
+			JOIN sales_reps s
+			ON a.sales_rep_id = s.id
+			JOIN region r
+			ON s.region_id = r.id
+			GROUP BY 1
+			ORDER BY 2 DESC
+		   ) t1
+	LIMIT 1
+	)
+GROUP BY 1
 
 /*
 3. How many accounts had more total purchases than the 
