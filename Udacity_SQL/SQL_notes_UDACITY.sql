@@ -2160,6 +2160,8 @@ name columns that hold the first and last names for
 the primary_poc.
 */
 
+# STRPOS(primary_poc, ' ')
+
 SELECT primary_poc, 
 	   LEFT(primary_poc, pos_space) AS firstName,
 	   RIGHT(primary_poc, len - pos_space) AS lastName
@@ -2174,6 +2176,8 @@ FROM
 name in the sales_reps table. Again provide first and 
 last name columns.
 */
+
+# STRPOS(name, ' ')
 
 SELECT name, LEFT(name, pos_space) AS firstName,
 	RIGHT(name, len - pos_space)  lastName
