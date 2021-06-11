@@ -2160,6 +2160,14 @@ name columns that hold the first and last names for
 the primary_poc.
 */
 
+SELECT primary_poc, 
+	   LEFT(primary_poc, pos_space) AS firstName,
+	   RIGHT(primary_poc, len - pos_space) AS lastName
+FROM 
+	(SELECT POSITION(' ' IN primary_poc) AS pos_space, 
+		LENGTH(primary_poc) AS len, primary_poc
+      FROM accounts) AS t1
+
 
 /*
 2. Now see if you can do the same thing for every rep 
@@ -2167,3 +2175,9 @@ name in the sales_reps table. Again provide first and
 last name columns.
 */
 
+SELECT name, LEFT(name, pos_space) AS firstName,
+	RIGHT(name, len - pos_space)  lastName
+FROM 
+	(SELECT POSITION(' ' IN name) AS pos_space, 
+		LENGTH(name) AS len, name
+      FROM sales_reps) AS t1
