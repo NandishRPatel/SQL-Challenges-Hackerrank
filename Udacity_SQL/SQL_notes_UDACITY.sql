@@ -2212,6 +2212,17 @@ address should be the first name of the primary_poc '.'
 last name primary_poc @ company name .com.
 */
 
+SELECT primary_poc, name, 
+	   LOWER(CONCAT(firstName, '.', lastName, 
+	   	'@', name, '.com')) AS email
+FROM
+(SELECT SPLIT_PART(primary_poc, ' ', 1) AS firstName,
+		SPLIT_PART(primary_poc, ' ', 2) AS lastName,
+        name,
+ 		primary_poc
+from accounts) AS t1
+
+
 /*
 2. You may have noticed that in the previous solution 
 some of the company names include spaces, which will 
@@ -2221,6 +2232,15 @@ of the spaces in the account name, but otherwise your
 solution should be just as in question 1. Some helpful 
 documentation is here.
 */
+
+SELECT primary_poc, name, LOWER(CONCAT(firstName, '.', lastName, '@', REPLACE(name, ' ', ''), '.com'))
+FROM
+(SELECT SPLIT_PART(primary_poc, ' ', 1) AS firstName,
+		SPLIT_PART(primary_poc, ' ', 2) AS lastName,
+        name,
+ 		primary_poc
+from accounts) AS t1
+
 
 /*
 3. We would also like to create an initial password, 
@@ -2234,3 +2254,19 @@ in their first name, the number of letters in their
 last name, and then the name of the company they are 
 working with, all capitalized with no spaces.
 */
+
+SELECT primary_poc, name, 
+	    CONCAT(LOWER(LEFT(firstName, 1)),
+			LOWER(RIGHT(firstName, 1)),
+			LOWER(LEFT(lastName, 1)),
+			LOWER(RIGHT(lastName, 1)),
+			LENGTH(firstName),
+			LENGTH(lastName),
+			UPPER(REPLACE(name, ' ', ''))
+		)
+FROM
+(SELECT SPLIT_PART(primary_poc, ' ', 1) AS firstName,
+		SPLIT_PART(primary_poc, ' ', 2) AS lastName,
+        name,
+ 		primary_poc
+from accounts) AS t1
