@@ -2055,7 +2055,6 @@ FROM (SELECT o.account_id, AVG(o.total_amt_usd) avg_amt
 ## SQL Data Cleaning
 
 
-
 ### LEFT and RIGHT
 
 
@@ -2068,6 +2067,11 @@ extensions and provide how many of each website type
 exist in the accounts table.
 */
 
+SELECT RIGHT(website, 3), COUNT(*) AS counts
+FROM accounts
+GROUP BY 1
+ORDER BY 2 DESC
+
 
 /*
 2. There is much debate about how much the name (or 
@@ -2076,6 +2080,11 @@ the accounts table to pull the first letter of each
 company name to see the distribution of company names 
 that begin with each letter (or number).
 */
+
+SELECT LEFT(name, 1), COUNT(*) AS frequency
+FROM accounts
+GROUP BY 1
+ORDER BY 2 DESC
 
 
 /*
@@ -2086,9 +2095,29 @@ names that start with a letter. What proportion of
 company names start with a letter? 
 */
 
+SELECT
+	CASE 
+		WHEN LEFT(name, 1) IN 
+			('0', '1', '2', '3', '4', '5', '6', '7', 
+				'8', '9') THEN 'Digit'
+    	ELSE 'Letter' 
+    END AS group, COUNT(*) frequency
+FROM accounts
+GROUP BY 1
+ORDER BY 2 DESC
 
 /*
 4. Consider vowels as a, e, i, o, and u. What 
 proportion of company names start with a vowel, and 
 what percent start with anything else?
 */
+
+SELECT 
+	CASE 
+		WHEN LEFT(name, 1) IN 
+			('A', 'E', 'I', 'O', 'U') THEN 'Vowel'
+        ELSE 'Other' 
+    END AS group, COUNT(*) frequency
+FROM accounts
+GROUP BY 1
+ORDER BY 2 DESC
