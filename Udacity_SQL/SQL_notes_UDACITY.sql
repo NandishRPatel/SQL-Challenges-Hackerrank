@@ -2270,3 +2270,32 @@ FROM
         name,
  		primary_poc
 from accounts) AS t1
+
+
+
+### CASt
+
+/*
+In this video, you saw additional functionality for 
+working with dates including:
+
+	1. TO_DATE
+	2. CAST
+	3. Casting with ::
+
+DATE_PART('month', TO_DATE(month, 'month')) here 
+changed a month name into the number associated with 
+that particular month.
+
+Then you can change a string to a date using CAST. 
+CAST is actually useful to change lots of column types.
+Commonly you might be doing as you saw here, where you 
+change a string to a date using CAST(date_column AS 
+DATE). However, you might want to make other changes 
+to your columns in terms of their data types. You can 
+see other examples here.
+
+In this example, you also saw that instead of 
+CAST(date_column AS DATE), you can use 
+date_column::DATE.
+*/
