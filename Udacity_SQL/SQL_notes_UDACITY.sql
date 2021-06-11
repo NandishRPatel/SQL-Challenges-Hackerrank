@@ -2299,3 +2299,17 @@ In this example, you also saw that instead of
 CAST(date_column AS DATE), you can use 
 date_column::DATE.
 */
+
+
+
+/*
+1. Change the date into correct format
+*/
+
+SELECT (year || '-' || month  || '-' || day)::date
+FROM
+	(SELECT SPLIT_PART(date, '/', 1) AS month, 
+		SPLIT_PART(date, '/', 2) AS day,
+        LEFT(SPLIT_PART(date, '/', 3), 4) AS year
+from sf_crime_data) as t1
+
