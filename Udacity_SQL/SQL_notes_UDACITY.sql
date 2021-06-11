@@ -2153,3 +2153,17 @@ the case of a letter, you might want to use LOWER or
 UPPER to make all of the characters lower or uppercase.
 */
 
+
+/*
+1. Use the accounts table to create first and last 
+name columns that hold the first and last names for 
+the primary_poc.
+*/
+
+
+/*
+2. Now see if you can do the same thing for every rep 
+name in the sales_reps table. Again provide first and 
+last name columns.
+*/
+
