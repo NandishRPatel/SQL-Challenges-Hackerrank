@@ -2185,3 +2185,21 @@ FROM
 	(SELECT POSITION(' ' IN name) AS pos_space, 
 		LENGTH(name) AS len, name
       FROM sales_reps) AS t1
+
+
+
+### CONCAT
+
+/*
+In this lesson you learned about:
+
+	1. CONCAT
+	2. Piping ||
+
+- Each of these will allow you to combine columns 
+together across rows. In this video, you saw how first 
+and last names stored in separate columns could be 
+combined together to create a full name: 
+CONCAT(first_name, ' ', last_name) or with piping as 
+first_name || ' ' || last_name.
+*/
